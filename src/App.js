@@ -11,11 +11,11 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="clientes" element={<TelaCadastroCliente/>} />
-          <Route path="produtos" element={<TelaCadastroProduto/>} />
-          <Route path="fornecedores" element={<TelaCadastroFornecedor/>} />
-          <Route path="categorias" element={<TelaCadastroCategoria/>} />
-          <Route path="/" element={<TelaMenu/>} />
+          <Route path="/SistemaLPII/clientes" element={<TelaCadastroCliente/>} />
+          <Route path="/SistemaLPII/produtos" element={<TelaCadastroProduto/>} />
+          <Route path="/SistemaLPII/fornecedores" element={<TelaCadastroFornecedor/>} />
+          <Route path="/SistemaLPII/categorias" element={<TelaCadastroCategoria/>} />
+          <Route path="/SistemaLPII" element={<TelaMenu/>} />
           <Route path="*" element={<Tela404/>} />
         </Routes>
       </BrowserRouter>
