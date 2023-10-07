@@ -1,16 +1,15 @@
-import {Container} from 'react-bootstrap';
-import Pagina from '../templates/Pagina';
-import {Alert} from 'react-bootstrap';
-
+import { Container, Alert } from "react-bootstrap";
+import Pagina from "../templates/Pagina";
 
 export default function Tela404(props){
     return(
         <Container>
             <Pagina>
-                <Alert>
-                
-                </Alert>
-            </Pagina>    
+                <Alert variant="danger">
+                    O sistema não oferece acesso a essa página.
+                    Utilize o Menu para acessar as opções válidas. 
+                </Alert> 
+            </Pagina>
         </Container>
     );
 }

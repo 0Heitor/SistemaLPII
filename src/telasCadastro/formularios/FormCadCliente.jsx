@@ -1,8 +1,8 @@
-import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useState } from "react";
+import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 export default function FormCadCliente(props) {
-    //Os atributos deste objeto deve estar associados aos inputs do formulario
-    const clienteVazio =({
+    //os atributos deste objeto devem estar associados aos inputs do formulários
+    const clienteVazio = {
         cpf:'',
         nome:'',
         endereco:'',
@@ -11,63 +11,60 @@ export default function FormCadCliente(props) {
         cidade:'',
         uf:'SP',
         cep:''
-    });
+    }
     const estadoInicialCliente = props.clienteParaEdicao;
-    const [cliente,setCliente] = useState(estadoInicialCliente);
-    const [validado,setValidado] = useState(false);
-    
+    const [cliente, setCliente] = useState(estadoInicialCliente);
+    const [formValidado, setFormValidado] = useState(false);
+
     function manipularMudancas(e){
         const componente = e.currentTarget;
+        //console.log(componente.value)
         setCliente({...cliente,[componente.name]:componente.value});
     }
-    
+
     function manipularSubmissao(e){
-        console.log(cliente);
-        const form = e.currentTarget;
-        if (form.checkValidity()) {
+        const form = e.currentTarget; 
+        if (form.checkValidity()){
+            //todos os campos preenchidos
+            //mandar os dados para o backend
             if(!props.modoEdicao){
                 props.setListaClientes([...props.listaClientes,cliente]);
+                props.setMensagem('Cliente incluído com sucesso');
+                props.setTipoMensagem('success');
+                props.setMostrarMensagem(true);
             }
             else{
+                //alterar os dados do cliente (filtra e adiciona)
+
                 props.setListaClientes([...props.listaClientes.filter((itemCliente)=>itemCliente.cpf !== cliente.cpf),cliente]);
                 props.setModoEdicao(false);
-                props.setClienteParaEdicao({
-                    cpf:'',
-                    nome:'',
-                    endereco:'',
-                    numero:'',
-                    bairro:'',
-                    cidade:'',
-                    uf:'SP',
-                    cep:''
-                });
+                props.setClienteParaEdicao(clienteVazio);                
             }
-            //setLista([...lista,cliente]);
-            setCliente(clienteVazio);
-            setValidado(false);
-            //props.exibirFormulario(false);
+            setCliente(clienteVazio); // ou sair da tela de formulário 
+            setFormValidado(false);
         }
-        else
-            setValidado(true);
-        e.preventDefault();
+        else{
+            setFormValidado(true);
+        }
+
         e.stopPropagation();
-        //console.log(lista);
+        e.preventDefault();
     }
 
     return (
         <Container>
-            <Form noValidate validated={validado} onSubmit={manipularSubmissao} >
+            <Form noValidate validated={formValidado} onSubmit={manipularSubmissao} >
                 <Row>
                     <Col>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="CPF:"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
-                                placeholder="000.000.000-00" 
+                                placeholder="000.000.000-00"
+                                id="cpf"
                                 name="cpf"
                                 value={cliente.cpf}
                                 onChange={manipularMudancas}
@@ -81,13 +78,13 @@ export default function FormCadCliente(props) {
                     <Col>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Nome Completo:"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
-                                placeholder="Informe o nome completo" 
+                                placeholder="Informe o nome completo"
+                                id="nome"
                                 name="nome"
                                 value={cliente.nome}
                                 onChange={manipularMudancas}
@@ -101,13 +98,13 @@ export default function FormCadCliente(props) {
                     <Col md={10}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Endereço:"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
-                                placeholder="Avenida/Rua/Alameda/Viela ..." 
+                                placeholder="Avenida/Rua/Alameda/Viela ..."
+                                id="endereco"
                                 name="endereco" 
                                 value={cliente.endereco}
                                 onChange={manipularMudancas}
@@ -119,13 +116,13 @@ export default function FormCadCliente(props) {
                     <Col md={2}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Número"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
                                 placeholder="Nº" 
+                                id="numero" 
                                 name="numero"
                                 value={cliente.numero}
                                 onChange={manipularMudancas}
@@ -139,13 +136,13 @@ export default function FormCadCliente(props) {
                     <Col md={4}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Bairro:"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
-                                placeholder="Bairro/Vila..." 
+                                placeholder="Bairro/Vila..."
+                                id="bairro" 
                                 name="bairro"
                                 value={cliente.bairro} 
                                 onChange={manipularMudancas}
@@ -157,13 +154,13 @@ export default function FormCadCliente(props) {
                     <Col md={5}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Cidade"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
-                                placeholder="Cidade" 
+                                placeholder="Cidade"
+                                id="cidade" 
                                 name="cidade"
                                 value={cliente.cidade}
                                 onChange={manipularMudancas}
@@ -173,8 +170,8 @@ export default function FormCadCliente(props) {
                         </Form.Group>
                     </Col>
                     <Col md={3}>
-                        <FloatingLabel controlId="floatingSelect" label="UF:">
-                            <Form.Select aria-label="Unidades Federativas brasileiras" value={cliente.uf} name="uf" onChange={manipularMudancas}>
+                        <FloatingLabel label="UF:">
+                            <Form.Select aria-label="Unidades Federativas brasileiras" value={cliente.uf} id="uf" name="uf" onChange={manipularMudancas}>
                                 <option value="SP">São Paulo</option>
                                 <option value="AC">Acre</option>
                                 <option value="AL">Alagoas</option>
@@ -210,13 +207,13 @@ export default function FormCadCliente(props) {
                     <Col md={4}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="CEP:"
                                 className="mb-3"
                             >
                             <Form.Control 
                                 type="text" 
-                                placeholder="00000-000" 
+                                placeholder="00000-000"
+                                id="cep"
                                 name="cep"
                                 value={cliente.cep}
                                 onChange={manipularMudancas}

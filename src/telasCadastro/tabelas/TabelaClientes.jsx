@@ -1,24 +1,26 @@
 import { Button, Container, Table } from "react-bootstrap";
-//import TelaCadastroCliente from "../TelaCadastroCliente";
 
 export default function TabelaClientes(props) {
-    console.log(props.listaClientes);
-    function excluirCliente(cliente){
-        if(window.confirm('Deseja relamente excluir esse cliente?'))
-        props.setListaClientes(
-            props.listaClientes.filter((itemLista => itemLista.cpf !== cliente.cpf))
-        );
+    function excluirCliente(cliente) {
+        if (window.confirm('Deseja realmente excluir esse cliente?')) {
+            props.setListaClientes(
+                props.listaClientes.filter((itemLista => itemLista.cpf !== cliente.cpf))
+            );
+        }
     }
 
     function editarCliente(cliente){
-        props.setClienteParaEdicao(cliente); 
+
+        props.setClienteParaEdicao(cliente);
         props.setModoEdicao(true);
         props.exibirFormulario(true);
+
     }
+
 
     return (
         <Container>
-            <Button type="button" onClick={()=>{
+            <Button type="button" onClick={() => {
                 props.exibirFormulario(true);
             }}>Novo Cliente</Button>
             <Table striped bordered hover>
@@ -27,6 +29,7 @@ export default function TabelaClientes(props) {
                         <th>CPF</th>
                         <th>Nome</th>
                         <th>Endereço/Nº</th>
+                        <th>Bairro</th>
                         <th>Cidade/UF</th>
                         <th>CEP</th>
                         <th>Ações</th>
@@ -35,13 +38,14 @@ export default function TabelaClientes(props) {
                 <tbody>
                     {
                         props.listaClientes.map((cliente) => {
-                        return (<tr key={cliente.cpf}>
-                            <td>{cliente.cpf}</td>
-                            <td>{cliente.nome}</td>
-                            <td>{cliente.endereco}</td>
-                            <td>{cliente.cidade}{"/"}{cliente.uf}</td>
-                            <td>{cliente.cep}</td>
-                            <td>
+                            return (<tr key={cliente.cpf}>
+                                <td>{cliente.cpf}</td>
+                                <td>{cliente.nome}</td>
+                                <td>{cliente.endereco + ", n " + cliente.numero}</td>
+                                <td>{cliente.bairro}</td>
+                                <td>`{cliente.cidade}/{cliente.uf}`</td>
+                                <td>{cliente.cep}</td>
+                                <td>
                                 <Button variant="danger" onClick={()=> {excluirCliente(cliente)}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
