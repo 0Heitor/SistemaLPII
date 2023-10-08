@@ -2,6 +2,7 @@ import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstra
 import { useState } from "react";
 
 export default function FormCadFornecedor(props){
+    
     const fornecedorVazio = {
         nome: '',
         cnpj: '',
@@ -33,7 +34,7 @@ export default function FormCadFornecedor(props){
                 props.setMostrarMensagem(true);
             }
             else{
-                props.setListaFornecedores([...props.listaFornecedores.filter((itemFornecedor)=>itemFornecedor.cpf !== fornecedor.cpf),fornecedor]);
+                props.setListaFornecedores([...props.listaFornecedores.filter((itemFornecedor)=>itemFornecedor.cpf !== props.fornecedorParaEdicao.cpf),fornecedor]);
                 props.setModoEdicao(false);
                 props.setFornecedorParaEdicao(fornecedorVazio);                
             }

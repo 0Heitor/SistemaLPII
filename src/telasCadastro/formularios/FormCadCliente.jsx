@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 export default function FormCadCliente(props) {
-    //os atributos deste objeto devem estar associados aos inputs do formulários
+    
     const clienteVazio = {
         cpf:'',
         nome:'',
@@ -36,7 +36,7 @@ export default function FormCadCliente(props) {
             else{
                 //alterar os dados do cliente (filtra e adiciona)
 
-                props.setListaClientes([...props.listaClientes.filter((itemCliente)=>itemCliente.cpf !== cliente.cpf),cliente]);
+                props.setListaClientes([...props.listaClientes.filter((itemCliente)=>itemCliente.cpf !== props.clienteParaEdicao.cpf),cliente]);
                 props.setModoEdicao(false);
                 props.setClienteParaEdicao(clienteVazio);                
             }

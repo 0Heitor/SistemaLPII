@@ -2,9 +2,7 @@ import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstra
 import { useState } from 'react';
 
 export default function FormCadCategoria(props) {
-    //codigo
-    //nome
-    //descricao
+    
     const categoriaVazio = {
         codigo:'',
         nome:'',
@@ -29,7 +27,7 @@ export default function FormCadCategoria(props) {
                 props.setMostrarMensagem(true);
             }
             else{
-                props.setListaCategorias([...props.listaCategorias.filter((itemCategoria)=>itemCategoria.codigo !== categoria.codigo),categoria]);
+                props.setListaCategorias([...props.listaCategorias.filter((itemCategoria)=>itemCategoria.codigo !== props.categoriaParaEdicao),categoria]);
                 props.setModoEdicao(false);
                 props.setCategoriaParaEdicao(categoriaVazio);
             }
