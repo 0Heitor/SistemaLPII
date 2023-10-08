@@ -27,7 +27,7 @@ export default function FormCadCategoria(props) {
                 props.setMostrarMensagem(true);
             }
             else{
-                props.setListaCategorias([...props.listaCategorias.filter((itemCategoria)=>itemCategoria.codigo !== props.categoriaParaEdicao),categoria]);
+                props.setListaCategorias([...props.listaCategorias.filter((itemCategoria)=>itemCategoria.codigo !== props.categoriaParaEdicao.codigo),categoria]);
                 props.setModoEdicao(false);
                 props.setCategoriaParaEdicao(categoriaVazio);
             }
