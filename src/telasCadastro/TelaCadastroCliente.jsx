@@ -1,8 +1,8 @@
 import { Container } from "react-bootstrap";
+import { useState } from "react";
 import Pagina from "../templates/Pagina";
 import FormCadCliente from "./formularios/FormCadCliente";
 import TabelaClientes from "./tabelas/TabelaClientes";
-import { useState } from "react";
 import TelaMensagem from "./TelaMensagem";
 
 export default function TelaCadastroCliente(props) {
@@ -11,7 +11,7 @@ export default function TelaCadastroCliente(props) {
     const [mostrarMensagem, setMostrarMensagem] = useState(false);
     const [mensagem, setMensagem] = useState("");
     const [tipoMensagem, setTipoMensagem] = useState("");
-
+    const [modoEdicao, setModoEdicao] = useState(false);
     const [clienteParaEdicao, setClienteParaEdicao] = useState({
         cpf: '',
         nome: '',
@@ -22,14 +22,13 @@ export default function TelaCadastroCliente(props) {
         uf: 'SP',
         cep: ''
     });
-    const [modoEdicao, setModoEdicao] = useState(false);
     
     if (mostrarMensagem) {
         return (
             <TelaMensagem mensagem={mensagem} tipo={tipoMensagem} setMostrarMensagem={setMostrarMensagem}/>
         )
     }
-    else {
+    else{
         return (
             <Container>
                 <Pagina>

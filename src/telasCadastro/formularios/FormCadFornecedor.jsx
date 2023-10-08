@@ -1,28 +1,63 @@
 import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstrap";
-//codigo
-//Nome -
-//cnpj -
-//cidade -
-//UF -
-//endereco -
-//num -
-//cpf -
-//rg -
-//email
-//telefone
+import { useState } from "react";
+
 export default function FormCadFornecedor(props){
+    const fornecedorVazio = {
+        nome: '',
+        cnpj: '',
+        cidade: '',
+        uf: 'SP',
+        endereco: '',
+        numero: '',
+        cpf: '',
+        rg: '',
+        email:'',
+        telefone:''
+    }
+    const estadoInicialFornecedor = props.fornecedorParaEdicao;
+    const [fornecedor, setFornecedor] = useState(estadoInicialFornecedor);
+    const [formValidado, setFormValidado] = useState(false);
+
+    function manipularMudancas(e){
+        const componente = e.currentTarget;
+        setFornecedor({...fornecedor,[componente.name]:componente.value});
+    }
+
+    function manipularSubmissao(e){
+        const form = e.currentTarget; 
+        if (form.checkValidity()){
+            if(!props.modoEdicao){
+                props.setListaFornecedores([...props.listaFornecedores,fornecedor]);
+                props.setMensagem('Fornecedor incluído com sucesso');
+                props.setTipoMensagem('success');
+                props.setMostrarMensagem(true);
+            }
+            else{
+                props.setListaFornecedores([...props.listaFornecedores.filter((itemFornecedor)=>itemFornecedor.cpf !== fornecedor.cpf),fornecedor]);
+                props.setModoEdicao(false);
+                props.setFornecedorParaEdicao(fornecedorVazio);                
+            }
+            setFornecedor(fornecedorVazio);
+            setFormValidado(false);
+        }
+        else{
+            setFormValidado(true);
+        }
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
     return (
         <Container>
-            <Form>
+            <Form noValidate validated={formValidado} onSubmit={manipularSubmissao}>
                 <Row>
                     <Col>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Nome:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Informe o nome completo" id="nome" name="nome" required />
+                            <Form.Control type="text" placeholder="Informe o nome completo" id="nome" name="nome" value={fornecedor.nome} onChange={manipularMudancas} required />
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o nome!</Form.Control.Feedback>
                         </Form.Group>
@@ -32,11 +67,10 @@ export default function FormCadFornecedor(props){
                     <Col>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Cnpj:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Informe o seu CNPJ" id="cnpj" name="cnpj" required />
+                            <Form.Control type="text" placeholder="Informe o seu CNPJ" id="cnpj" name="cnpj" value={fornecedor.cnpj} onChange={manipularMudancas} required />
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o CNPJ!</Form.Control.Feedback>
                         </Form.Group>
@@ -46,11 +80,10 @@ export default function FormCadFornecedor(props){
                     <Col md={10}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Endereço:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Avenida/Rua/Alameda/Viela ..." id="endereco" name="endereco" />
+                            <Form.Control type="text" placeholder="Avenida/Rua/Alameda/Viela ..." id="endereco" name="endereco" value={fornecedor.endereco} onChange={manipularMudancas} required/>
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o endereço!</Form.Control.Feedback>
                         </Form.Group>
@@ -58,11 +91,10 @@ export default function FormCadFornecedor(props){
                     <Col md={2}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Número"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Nº" id="numero" name="numero" />
+                            <Form.Control type="text" placeholder="Nº" id="numero" name="numero" value={fornecedor.numero} onChange={manipularMudancas} required/>
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o número!</Form.Control.Feedback>
                         </Form.Group>
@@ -72,19 +104,18 @@ export default function FormCadFornecedor(props){
                     <Col md={5}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Cidade"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Cidade" id="cidade" name="cidade" />
+                            <Form.Control type="text" placeholder="Cidade" id="cidade" name="cidade" value={fornecedor.cidade} onChange={manipularMudancas} required/>
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe a cidade!</Form.Control.Feedback>
                         </Form.Group>
                     </Col>
                     <Col md={3}>
-                        <FloatingLabel controlId="floatingSelect" label="UF:">
-                            <Form.Select aria-label="Unidades Federativas brasileiras">
-                                <option value="SP" selected>São Paulo</option>
+                        <FloatingLabel label="UF:">
+                            <Form.Select aria-label="Unidades Federativas brasileiras" value={fornecedor.uf} id="uf" name="uf" onChange={manipularMudancas}>
+                                <option value="SP">São Paulo</option>
                                 <option value="AC">Acre</option>
                                 <option value="AL">Alagoas</option>
                                 <option value="AP">Amapá</option>
@@ -119,11 +150,10 @@ export default function FormCadFornecedor(props){
                     <Col md={4}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="CPF:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="000.000.000-00" id="cpf" name="cpf" required />
+                            <Form.Control type="text" placeholder="000.000.000-00" id="cpf" name="cpf" value={fornecedor.cpf} onChange={manipularMudancas} required />
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o cpf!</Form.Control.Feedback>
                         </Form.Group>
@@ -131,11 +161,10 @@ export default function FormCadFornecedor(props){
                     <Col md={4}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="RG:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Informe o RG" id="rg" name="rg" required />
+                            <Form.Control type="text" placeholder="Informe o RG" id="rg" name="rg" value={fornecedor.rg} onChange={manipularMudancas} required />
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o rg!</Form.Control.Feedback>
                         </Form.Group>
@@ -145,11 +174,10 @@ export default function FormCadFornecedor(props){
                     <Col md={4}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="E-Mail:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Informe o Email" id="email" name="email" required />
+                            <Form.Control type="text" placeholder="Informe o Email" id="email" name="email" value={fornecedor.email} onChange={manipularMudancas} required />
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o email!</Form.Control.Feedback>
                         </Form.Group>
@@ -157,11 +185,10 @@ export default function FormCadFornecedor(props){
                     <Col md={4}>
                         <Form.Group>
                             <FloatingLabel
-                                controlId="floatingInput"
                                 label="Telefone:"
                                 className="mb-3"
                             >
-                            <Form.Control type="text" placeholder="Informe o Telefone" id="telefone" name="telefone" required />
+                            <Form.Control type="text" placeholder="Informe o Telefone" id="telefone" name="telefone" value={fornecedor.telefone} onChange={manipularMudancas} required />
                             </FloatingLabel>
                             <Form.Control.Feedback type="invalid">Informe o Telefone!</Form.Control.Feedback>
                         </Form.Group>
@@ -169,11 +196,11 @@ export default function FormCadFornecedor(props){
                 </Row>
                 <Row>
                     <Col md={6} offset={5} className="d-flex justify-content-end">
-                        <Button type="submit" variant={"primary"}>Cadastrar</Button>
+                    <Button type="submit" variant={"primary"}>{props.modoEdicao ? "Alterar":"Cadastrar"}</Button>
                     </Col>
                     <Col md={6} offset={5}>
                         <Button type="button" variant={"secondary"} onClick={()=>{
-                            props.exibirFormulario(false)
+                            props.exibirFormulario(false);
                         }}>Voltar</Button>
                     </Col>
                 </Row>
