@@ -42,7 +42,9 @@ export default function TabelaProdutos(props) {
         , {toastId: estado});
     }
     else {
-        toast.dismiss();
+        setTimeout(() => {
+            toast.dismiss();
+        },1000)
         return (
             <Container>
                 <Button type="button" onClick={()=>{
