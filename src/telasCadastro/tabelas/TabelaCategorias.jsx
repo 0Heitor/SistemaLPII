@@ -1,6 +1,7 @@
 import { Button, Container, Spinner, Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { buscarCategorias, removerCategoria } from "../../redux/categoriaReducer";
+import { buscarProdutos } from "../../redux/produtoReducer";
 import ESTADO from "../../recursos/estado";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -8,10 +9,22 @@ import { useEffect } from "react";
 export default function TabelaCategorias(props) {
 
     const { estado, mensagem, categorias } = useSelector(state => state.categoria);
+    const { estadoC, mensagemP, produtos } = useSelector(state => state.produto);
     const dispatch = useDispatch();
     function excluirCategoria(categoria) {
-        if (window.confirm('Deseja realmente excluir essa categoria?')) {
-            dispatch(removerCategoria(categoria));
+        let count=0;
+        for(let i=0; i < produtos.length ;i++){
+            if(produtos[i].categoria.codigo == categoria.codigo)
+                count++;
+        }
+
+        if(count == 0){
+            if(window.confirm('Deseja realmente excluir essa categoria?')){
+                dispatch(removerCategoria(categoria));
+            }
+        }
+        else{
+            window.confirm('Esta Categoria está associado um/uns produto(s) !')
         }
     }
 
@@ -24,6 +37,7 @@ export default function TabelaCategorias(props) {
 
     useEffect(() => {
         dispatch(buscarCategorias());
+        dispatch(buscarProdutos());
     }, [dispatch]);
 
     if (estado === ESTADO.PENDENTE) {

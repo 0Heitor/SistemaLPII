@@ -15,13 +15,16 @@ export default function FormCadProduto(props){
         precoCusto: '',
         precoVenda: '',
         qtdEstoque: '',
-        categoria: '',
+        categoria: {
+            codigo: 0,
+            descricao: ''
+        },
     }
     const estadoInicialProduto = props.produtoParaEdicao;
     const [produto, setProduto] = useState(estadoInicialProduto);
     const [formValidado, setFormValidado] = useState(false);
-    const { estadoP, mensagemP/*, produtos */} = useSelector((state) => state.produto);
-    const { estadoC, mensagemC, categorias } = useSelector((state) => state.categoria);
+    const { estado: estadoP, mensagem: mensagemP/*, produtos */} = useSelector((state) => state.produto);
+    const { estado: estadoC, mensagem: mensagemC, categorias } = useSelector((state) => state.categoria);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -31,6 +34,15 @@ export default function FormCadProduto(props){
     function manipularMudancas(e){
         const componente = e.currentTarget;
         setProduto({...produto,[componente.name]:componente.value});
+    }
+
+    function selecionaCategoria(e){
+        const componente = e.currentTarget;
+        setProduto({...produto, categoria:{
+            "codigo" : componente.value,
+            "descricao" : componente.options[componente.selectedIndex].text
+        }});
+        console.log(produto);
     }
 
     function manipularSubmissao(e){
@@ -54,16 +66,15 @@ export default function FormCadProduto(props){
         e.preventDefault();
     }
 
-    if(estadoP === ESTADO.ERRO && estadoC === ESTADO.ERRO) {
+    if(estadoP === ESTADO.ERRO /*&& estadoC === ESTADO.ERRO*/) {
         toast.error(({ closeToast }) =>
             <div>
                 <p>{mensagemP}</p>
-                <p>{mensagemC}</p>
             </div>
             , { toastId: estadoP });
     }
     else 
-    if(estadoP === ESTADO.PENDENTE && estadoC === ESTADO.PENDENTE) {
+    if(estadoP === ESTADO.PENDENTE /*&& estadoC === ESTADO.PENDENTE*/) {
         toast(({ closeToast }) =>
             <div>
                 <Spinner animation="border" role="status"></Spinner>
@@ -73,7 +84,10 @@ export default function FormCadProduto(props){
     }
     else{
     //if(estadoP === ESTADO.OCIOSO && estadoC === ESTADO.OCIOSO){
-        toast.dismiss();
+        setTimeout(() => {
+            toast.dismiss();
+        },2000)
+        
         return (
             <Container>
                 <h2>Cadastro de Produtos</h2>
@@ -165,16 +179,29 @@ export default function FormCadProduto(props){
                     <Row>
                         <Col md={3}>
                             <FloatingLabel label="Tipo de Categoria:">
-                                <Form.Select aria-label="Seleciona uma categoria" value={produto.categoria.codigo} id="categoria" name="categoria" onChange={manipularMudancas}>
-                                    <option value="-1" selected> </option>
+                                <Form.Select aria-label="Seleciona uma categoria" value={produto.categoria.codigo} id="categoria" name="categoria" onChange={selecionaCategoria} required>
+                                    <option value="-1" selected>Selecione uma categoria</option>
                                     {
-                                        categorias.map((cat) => {
+                                        categorias?.map((cat) => {
                                             return(
-                                                <option value={cat.codigo}>{cat.descricao}</option>
+                                                <option key={cat.codigo} value={cat.codigo}>{cat.descricao}</option>
                                             )
                                         })
                                     }
                                 </Form.Select>
+                                {estadoC === ESTADO.PENDENTE ? 
+                                    <Spinner animation="border" role="status">
+                                        <span clssName="visually-hidden">Carregando categorias...</span>
+                                    </Spinner> 
+                                    :
+                                    null
+                                }
+                                {
+                                    estadoC === ESTADO.ERRO ?
+                                        <p>Erro ao carregar as categorias</p>
+                                    :
+                                    null
+                                }
                             </FloatingLabel>
                         </Col>
                     </Row>
