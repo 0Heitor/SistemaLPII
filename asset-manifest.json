@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/SistemaLPII/static/css/main.99e4cf39.css",
-    "main.js": "/SistemaLPII/static/js/main.94dd68d7.js",
+    "main.css": "/SistemaLPII/static/css/main.25fc958f.css",
+    "main.js": "/SistemaLPII/static/js/main.84dbc7f0.js",
     "index.html": "/SistemaLPII/index.html",
-    "main.99e4cf39.css.map": "/SistemaLPII/static/css/main.99e4cf39.css.map",
-    "main.94dd68d7.js.map": "/SistemaLPII/static/js/main.94dd68d7.js.map"
+    "main.25fc958f.css.map": "/SistemaLPII/static/css/main.25fc958f.css.map",
+    "main.84dbc7f0.js.map": "/SistemaLPII/static/js/main.84dbc7f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.99e4cf39.css",
-    "static/js/main.94dd68d7.js"
+    "static/css/main.25fc958f.css",
+    "static/js/main.84dbc7f0.js"
   ]
 }
